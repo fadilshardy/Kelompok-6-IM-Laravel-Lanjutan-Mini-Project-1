@@ -17,11 +17,9 @@ class CreateMoviesTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->string('img_url')->nullable();
-            $table->string('tags');
-            $table->float('rating');
             $table->longText('synopsis');
             $table->date('release_date');
-            $table->string('watchtime');
+            $table->integer('watchtime');
             $table->timestamps();
         });
     }
