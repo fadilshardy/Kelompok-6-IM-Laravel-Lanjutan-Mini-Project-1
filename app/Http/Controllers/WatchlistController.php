@@ -6,6 +6,7 @@ use App\Http\Requests\WatchlistRequest;
 use App\Models\Watchlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class WatchlistController extends Controller
 {
@@ -16,7 +17,7 @@ class WatchlistController extends Controller
      */
     public function index()
     {
-        return Watchlist::all();
+        return Watchlist::where('user_id', Auth::user()->id)->get();
     }
 
     /**
@@ -43,7 +44,10 @@ class WatchlistController extends Controller
      */
     public function show($id)
     {
-        return Watchlist::findOrFail($id);
+        $watch = Watchlist::findOrFail($id);
+        if (Gate::authorize('watchlist', $watch)) {
+            return $watch;
+        }
     }
 
     /**
@@ -57,9 +61,13 @@ class WatchlistController extends Controller
     {
         $watch = Watchlist::findOrFail($id);
 
-        $watch->update([
-            'movie_id' => request('movie')
-        ]);
+        if (Gate::authorize('watchlist', $watch)) {
+            $watch->update([
+                'movie_id' => request('movie')
+            ]);
+
+            return 'Watchlist Updated';
+        }
     }
 
     /**
@@ -70,8 +78,10 @@ class WatchlistController extends Controller
      */
     public function destroy($id)
     {
-        Watchlist::destroy($id);
-
-        return 'Watchlist Deleted';
+        $watch = Watchlist::findOrFail($id);
+        if (Gate::authorize('watchlist', $watch)) {
+            $watch->delete($id);
+            return 'Watchlist Deleted';
+        }
     }
 }

@@ -20,3 +20,7 @@ Route::delete('movie/delete/{id}', 'MovieController@destroy');
 
 
 Route::post('watchlist', 'WatchlistController@store');
+Route::get('watchlist', 'WatchlistController@index');
+Route::get('watchlist/{id}', 'WatchlistController@show');
+Route::delete('watchlist/delete/{id}', 'WatchlistController@destroy');
+Route::patch('watchlist/update/{id}', 'WatchlistController@update');
