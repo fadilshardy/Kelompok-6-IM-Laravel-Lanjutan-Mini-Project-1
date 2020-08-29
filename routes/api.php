@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('movie/store', 'MovieController@store');
+Route::get('movie', 'MovieController@index');
+Route::get('movie/{id}', 'MovieController@show');
+Route::patch('movie/update/{id}', 'MovieController@update');
+Route::delete('movie/delete/{id}', 'MovieController@destroy');
