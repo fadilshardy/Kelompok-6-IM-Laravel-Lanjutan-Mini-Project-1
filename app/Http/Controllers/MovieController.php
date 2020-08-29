@@ -7,6 +7,7 @@ use App\Http\Resources\MovieCollection;
 use App\Http\Resources\MovieResource;
 use App\Models\Movie;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class MovieController extends Controller
 {
@@ -27,7 +28,8 @@ class MovieController extends Controller
             'img_url' => request('image'),
             'synopsis' => request('synopsis'),
             'release_date' => request('release_date'),
-            'watchtime' => request('watchtime')
+            'watchtime' => request('watchtime'),
+            'category' => request('category')
         ];
     }
 
@@ -39,7 +41,25 @@ class MovieController extends Controller
      */
     public function store(MovieRequest $request)
     {
-        Movie::create($this->movieForm());
+
+        $category_array = explode(',', $request['category']);
+
+        $category_ids = [];
+
+        foreach ($category_array as $category_name) {
+            $category = Category::where('name', $category_name)->first();
+
+            if ($category) {
+                $category_ids[] = $category->id;
+            }else {
+                $new_category = Category::create(['name' => $category_name]);
+                $category_ids[] = $new_category->id;
+             }
+        }
+
+        $movie = Movie::create($this->movieForm());
+
+        $movie->categories()->sync($category_ids);
 
         return 'Movie Created';
     }
@@ -65,7 +85,26 @@ class MovieController extends Controller
     public function update(MovieRequest $request, $id)
     {
         $movie = Movie::findOrFail($id);
+
+        $category_array = explode(',', $request['category']);
+
+        $category_ids = [];
+
+        foreach ($category_array as $category_name) {
+            $category = Category::where('name', $category_name)->first();
+
+            if ($category) {
+                $category_ids[] = $category->id;
+            }else {
+                $new_category = Category::create(['name' => $category_name]);
+                $category_ids[] = $new_category->id;
+             }
+        }
+
+        $movie->categories()->sync($category_ids);
         $movie->update($this->movieForm());
+
+        return response()->json('Data has been updated.');
     }
 
     /**
