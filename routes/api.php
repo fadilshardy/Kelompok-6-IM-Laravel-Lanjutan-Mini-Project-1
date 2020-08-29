@@ -10,6 +10,9 @@ Route::namespace('Auth')->group(function () {
 
 Route::namespace('User')->group(function () {
     Route::get('user', 'UserController@index');
+	Route::get('user/{id}', 'UserController@show');
+    Route::patch('update-user/{id}', 'UserController@update');
+    Route::delete('delete-user/{id}', 'UserController@destroy');
 });
 
 Route::post('movie/store', 'MovieController@store');
