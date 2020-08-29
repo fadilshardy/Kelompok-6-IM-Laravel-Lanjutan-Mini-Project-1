@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\Watchlist;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -46,5 +47,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function watchlist()
+    {
+        return $this->hasMany(Watchlist::class);
     }
 }

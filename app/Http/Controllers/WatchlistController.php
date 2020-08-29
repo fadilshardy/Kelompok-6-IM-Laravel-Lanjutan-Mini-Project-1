@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\WatchlistRequest;
+use App\Models\Watchlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
-class UserController extends Controller
+class WatchlistController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::with('watchlist')->find(Auth::user()->id);
-        return $user;
+        return Watchlist::all();
     }
 
     /**
@@ -26,9 +25,14 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(WatchlistRequest $request)
     {
-        //
+        // dd(Auth::user());
+        Auth::user()->watchlist()->create([
+            'movie_id' => request('movie_id')
+        ]);
+
+        return 'Wishlist Restored';
     }
 
     /**
@@ -39,7 +43,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        return Watchlist::findOrFail($id);
     }
 
     /**
@@ -49,9 +53,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(WatchlistRequest $request, $id)
     {
-        //
+        $watch = Watchlist::findOrFail($id);
+
+        $watch->update([
+            'movie_id' => request('movie')
+        ]);
     }
 
     /**
@@ -62,6 +70,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Watchlist::destroy($id);
+
+        return 'Watchlist Deleted';
     }
 }
