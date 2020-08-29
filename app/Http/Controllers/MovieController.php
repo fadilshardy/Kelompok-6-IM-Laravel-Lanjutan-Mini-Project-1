@@ -104,7 +104,7 @@ class MovieController extends Controller
         $movie->categories()->sync($category_ids);
         $movie->update($this->movieForm());
 
-        return response()->json('Data has been updated.');
+        return response()->json('Movie has been updated.');
     }
 
     /**

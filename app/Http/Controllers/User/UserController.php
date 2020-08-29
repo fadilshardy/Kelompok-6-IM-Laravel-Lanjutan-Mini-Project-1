@@ -5,6 +5,9 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -15,7 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
+        $user = User::get();
         return $user;
     }
 
@@ -25,9 +28,20 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    public function userForm() {
+        return [
+            'username' => request('username'),
+            'email' => request('email'),
+            'name' => request('name'),
+            'password' => request('password'),
+            'phone' => request('phone')
+        ];
+    }
+
     public function store(Request $request)
     {
-        //
+        //        
     }
 
     /**
@@ -38,7 +52,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        return new UserResource(User::findOrFail($id));
     }
 
     /**
@@ -48,9 +62,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(RegisterRequest $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $user->update($this->userForm());
+
+        return response()->json('User has been updated.');
     }
 
     /**
@@ -61,6 +79,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::destroy($id);
+
+        return response()->json('User deleted.');
     }
 }
