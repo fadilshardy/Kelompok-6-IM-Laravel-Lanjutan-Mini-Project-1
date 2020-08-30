@@ -26,9 +26,9 @@ class MovieRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'image_url' => ['string'],
-            'synopsis' => ['required', 'string', 'max:255'],
+            'synopsis' => ['required', 'string', 'max:1000'],
             'watchtime' => ['required', 'integer'],
-            'category' => ['string']
+            'category' => ['string'],
         ];
     }
 }

@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Rating;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RatingRequest;
-use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Movie;
 use App\Models\Rating;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -28,7 +27,7 @@ class RatingController extends Controller
         return [
             'movie_id' => request('movie_id'),
             'rate' => request('rate'),
-            'comment' => request('comment')
+            'comment' => request('comment'),
         ];
     }
 
@@ -57,9 +56,10 @@ class RatingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Rating $rating)
     {
-        return Rating::findOrFail($id);
+        $rating->likes_count = $rating->likes_count();
+        return $rating;
     }
 
     /**
