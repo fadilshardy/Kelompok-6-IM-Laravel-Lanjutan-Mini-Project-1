@@ -10,7 +10,7 @@ Route::namespace('Auth')->group(function () {
 
 Route::namespace('User')->group(function () {
     Route::get('user', 'UserController@index');
-	Route::get('user/{id}', 'UserController@show');
+    Route::get('user/{id}', 'UserController@show');
     Route::patch('update-user/{id}', 'UserController@update');
     Route::delete('delete-user/{id}', 'UserController@destroy');
 });
@@ -27,3 +27,9 @@ Route::get('watchlist', 'WatchlistController@index');
 Route::get('watchlist/{id}', 'WatchlistController@show');
 Route::delete('watchlist/delete/{id}', 'WatchlistController@destroy');
 Route::patch('watchlist/update/{id}', 'WatchlistController@update');
+
+Route::namespace('Rating')->group(function () {
+    Route::post('rating', 'RatingController@store');
+    Route::delete('rating/delete/{id}', 'RatingController@destroy');
+    Route::patch('rating/update/{id}', 'RatingController@update');
+});

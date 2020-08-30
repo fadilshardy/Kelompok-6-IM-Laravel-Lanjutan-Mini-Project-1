@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Models\Watchlist;
+use App\Models\Rating;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -52,5 +53,10 @@ class User extends Authenticatable implements JWTSubject
     public function watchlist()
     {
         return $this->hasMany(Watchlist::class);
+    }
+
+    public function rate()
+    {
+        return $this->hasMany(Rating::class);
     }
 }
