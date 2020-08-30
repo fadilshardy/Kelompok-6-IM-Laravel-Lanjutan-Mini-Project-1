@@ -28,5 +28,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('watchlist', function ($user, $watchlist) {
             return $user->id === $watchlist->user_id;
         });
+
+        Gate::define('rating', function ($user, $watchlist) {
+            return $user->id === $watchlist->user_id;
+        });
     }
 }

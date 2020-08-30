@@ -30,6 +30,7 @@ Route::patch('watchlist/update/{id}', 'WatchlistController@update');
 
 Route::namespace('Rating')->group(function () {
     Route::post('rating', 'RatingController@store');
+    Route::get('rating', 'RatingController@show');
     Route::delete('rating/delete/{id}', 'RatingController@destroy');
     Route::patch('rating/update/{id}', 'RatingController@update');
 });

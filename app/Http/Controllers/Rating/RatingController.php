@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Movie;
 use App\Models\Rating;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class RatingController extends Controller
 {
@@ -39,6 +40,12 @@ class RatingController extends Controller
      */
     public function store(RatingRequest $request)
     {
+        $exist = Rating::where('user_id', Auth::user()->id)->where('movie_id', request('movie_id'))->first();
+
+        if ($exist) {
+            return 'You Already Rated this Movie';
+        }
+
         Auth::user()->rate()->create($this->ratingForm());
 
         return 'Rating Created';
@@ -52,7 +59,7 @@ class RatingController extends Controller
      */
     public function show($id)
     {
-        //
+        return Rating::findOrFail($id);
     }
 
     /**
@@ -65,8 +72,11 @@ class RatingController extends Controller
     public function update(RatingRequest $request, $id)
     {
         $rate = Rating::findOrFail($id);
+        if (Gate::allows('rating', $rate)) {
+            $rate->update($this->ratingForm());
+        }
 
-        $rate->update($this->ratingForm());
+        return 'Youre Not Authorized';
     }
 
     /**

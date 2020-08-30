@@ -8,6 +8,7 @@ use App\Http\Resources\MovieResource;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 class MovieController extends Controller
 {
@@ -18,7 +19,11 @@ class MovieController extends Controller
      */
     public function index()
     {
-        return new MovieCollection(Movie::get());
+        $movie = Movie::with(['ratings', 'avg_rating' => function ($q) {
+            $q->getAvgRating()->pluck('avg_rating');
+        }])->get();
+
+        return new MovieCollection($movie);
     }
 
     public function movieForm()
