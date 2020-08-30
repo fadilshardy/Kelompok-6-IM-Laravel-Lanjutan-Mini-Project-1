@@ -27,3 +27,8 @@ Route::get('watchlist', 'WatchlistController@index');
 Route::get('watchlist/{id}', 'WatchlistController@show');
 Route::delete('watchlist/delete/{id}', 'WatchlistController@destroy');
 Route::patch('watchlist/update/{id}', 'WatchlistController@update');
+
+// Contoh penggunaaan middleware
+// Route::middleware('auth.role:admin')->group(function() {
+
+// });
