@@ -34,3 +34,7 @@ Route::namespace('Rating')->group(function () {
     Route::delete('rating/delete/{id}', 'RatingController@destroy');
     Route::patch('rating/update/{id}', 'RatingController@update');
 });
+// Contoh penggunaaan middleware
+// Route::middleware('auth.role:admin')->group(function() {
+
+// });
