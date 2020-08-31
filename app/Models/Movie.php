@@ -23,4 +23,5 @@ class Movie extends Model
     {
         return $this->ratings();
     }
+
 }

@@ -84,6 +84,28 @@ class RatingController extends Controller
 
     }
 
+    public function like(Rating $rating)
+    {
+
+        if (Auth::id() != $rating->user_id) {
+            $rating->like();
+            return 'rating liked';
+        } else {
+            return "You can't like your own review!";
+        }
+    }
+
+    public function dislike(Rating $rating)
+    {
+        if (Auth::id() != $rating->user_id) {
+            $rating->dislike();
+            return 'rating disliked';
+
+        } else {
+            return "You can't dislike your own review!";
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *
