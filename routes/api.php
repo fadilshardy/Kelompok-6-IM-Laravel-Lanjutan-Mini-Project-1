@@ -17,7 +17,6 @@ Route::namespace ('Movie')->middleware('auth.role:admin')->group(function () {
 Route::namespace ('watchlist')->middleware('auth.role:user')->group(function () {
     Route::post('watchlist/{id}', 'WatchlistController@store');
     Route::delete('watchlist/delete/{id}', 'WatchlistController@destroy');
-    Route::patch('watchlist/update/{id}', 'WatchlistController@update');
 });
 
 Route::namespace ('Rating')->middleware('auth.role:user')->group(function () {
