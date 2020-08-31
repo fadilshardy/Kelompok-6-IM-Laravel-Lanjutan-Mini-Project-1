@@ -8,6 +8,11 @@ class Movie extends Model
 {
     protected $guarded = [];
 
+    public function routeGetKeyName()
+    {
+        return 'id';
+    }
+
     public function categories()
     {
         return $this->belongsToMany('App\Models\Category', 'category_movie', 'movie_id', 'category_id');
@@ -15,8 +20,7 @@ class Movie extends Model
 
     public function ratings()
     {
-        $ratings = Rating::where('movie_id', $this->id)->get();
-        return $ratings;
+        return $this->hasMany(Rating::class);
     }
 
     public function avg_rating()

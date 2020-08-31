@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Watchlist;
 
 use App\Http\Controllers\Controller;
@@ -28,11 +29,15 @@ class WatchlistController extends Controller
      */
     public function store(WatchlistRequest $request, $id)
     {
-        Auth::user()->watchlist()->create([
-            'movie_id' => $id,
-        ]);
+        $watch = Watchlist::where('movie_id', $id)->where('user_id', Auth::user()->id)->first();
+        if (!$watch) {
+            Auth::user()->watchlist()->create([
+                'movie_id' => $id,
+            ]);
 
-        return Movie::find($id)->title . ' movie is inserted to wishlist';
+            return Movie::find($id)->title . ' movie is inserted to wishlist';
+        }
+        return 'Already Exists';
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Models\Rating;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class RatingController extends Controller
 {
@@ -68,20 +69,17 @@ class RatingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RatingRequest $request, Rating $rating)
+    public function update(RatingRequest $request, $id)
     {
+        $rating = Rating::findOrFail($id);
 
-        if (Auth::id() == $rating->user_id) {
+        if (Gate::allows('watchlist', $rating)) {
             $rating->update($this->ratingForm());
 
-        } else {
-            return 'Youre Not Authorized';
+            return 'Rating Movie Updated';
         }
 
-        // if (Gate::allows('rating', $rate)) {
-        //     $rate->update($this->ratingForm());
-        // }
-
+        return 'Youre Not Authorized';
     }
 
     /**

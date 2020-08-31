@@ -8,6 +8,7 @@ use App\Http\Resources\MovieCollection;
 use App\Models\Category;
 use App\Models\Movie;
 use Illuminate\Http\Request;
+use App\Http\Resources\MovieResource;
 
 class MovieController extends Controller
 {
@@ -18,11 +19,11 @@ class MovieController extends Controller
      */
     public function index()
     {
-        // $movie = Movie::with(['ratings', 'avg_rating' => function ($q) {
-        //     $q->getAvgRating()->pluck('avg_rating');
-        // }])->get();
+        $movie = Movie::with(['ratings', 'avg_rating' => function ($q) {
+            $q->getAvgRating()->get();
+        }])->get();
 
-        $movie = Movie::all();
+        // $movie = Movie::all();
 
         return new MovieCollection($movie);
     }
@@ -78,9 +79,11 @@ class MovieController extends Controller
      */
     public function show(Movie $movie)
     {
-        $movie->ratings = $movie->ratings();
-        return $movie;
-        // return new MovieResource(Movie::findOrFail($id));
+        $film = $movie->where('id', $movie->id)->with(['ratings', 'avg_rating' => function ($q) use ($movie) {
+            $q->where('movie_id', $movie->id)->getAvgRating()->get();
+        }])->first();;
+
+        return new MovieResource($film);
     }
 
     /**
