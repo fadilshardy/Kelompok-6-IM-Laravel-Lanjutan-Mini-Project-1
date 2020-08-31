@@ -98,7 +98,6 @@ class RatingController extends Controller
         if (Auth::id() != $rating->user_id) {
             $rating->dislike();
             return 'rating disliked';
-
         } else {
             return "You can't dislike your own review!";
         }
@@ -112,9 +111,14 @@ class RatingController extends Controller
      */
     public function destroy($id)
     {
-        $rate = Rating::findOrFail($id);
-        $rate->delete();
 
-        return 'Rating Deleted';
+        $rate = Rating::findOrFail($id);
+        if (Gate::allows('athorize', $rate)) {
+            $rate->delete();
+
+            return 'Rating Deleted';
+        }
+
+        return 'Youre Not Authorized';
     }
 }
