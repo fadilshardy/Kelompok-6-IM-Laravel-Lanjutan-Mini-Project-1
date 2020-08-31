@@ -73,7 +73,7 @@ class RatingController extends Controller
     {
         $rating = Rating::findOrFail($id);
 
-        if (Gate::allows('watchlist', $rating)) {
+        if (Gate::allows('athorize', $rating)) {
             $rating->update($this->ratingForm());
 
             return 'Rating Movie Updated';
