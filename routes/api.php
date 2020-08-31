@@ -11,16 +11,13 @@ Route::namespace ('Auth')->group(function () {
 Route::namespace ('User')->group(function () {
     Route::get('user', 'UserController@index');
     Route::get('user/{id}', 'UserController@show');
-    Route::patch('update-user/{id}', 'UserController@update');
-    Route::delete('delete-user/{id}', 'UserController@destroy');
+
 });
 
 Route::namespace ('Movie')->group(function () {
     Route::post('movie/store', 'MovieController@store');
     Route::get('movie', 'MovieController@index');
     Route::get('movie/{movie}', 'MovieController@show');
-    Route::patch('movie/update/{id}', 'MovieController@update');
-    Route::delete('movie/delete/{id}', 'MovieController@destroy');
 });
 
 Route::namespace ('watchlist')->group(function () {
@@ -38,6 +35,11 @@ Route::namespace ('Rating')->group(function () {
     Route::patch('rating/update/{id}', 'RatingController@update');
 });
 // Contoh penggunaaan middleware
-// Route::middleware('auth.role:admin')->group(function() {
+Route::middleware('auth.role:admin')->group(function () {
+    Route::post('movie/store', 'MovieController@store');
+    Route::patch('movie/update/{id}', 'MovieController@update');
+    Route::delete('movie/delete/{id}', 'MovieController@destroy');
 
-// });
+    Route::patch('update-user/{id}', 'UserController@update');
+    Route::delete('delete-user/{id}', 'UserController@destroy');
+});
