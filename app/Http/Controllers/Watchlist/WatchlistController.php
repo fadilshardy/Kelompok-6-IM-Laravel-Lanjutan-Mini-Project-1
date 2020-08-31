@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Watchlist;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WatchlistRequest;
+use App\Models\Movie;
 use App\Models\Watchlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,6 @@ class WatchlistController extends Controller
      */
     public function index()
     {
-        return Watchlist::where('user_id', Auth::user()->id)->get();
     }
 
     /**
@@ -26,14 +26,13 @@ class WatchlistController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(WatchlistRequest $request)
+    public function store(WatchlistRequest $request, $id)
     {
-        // dd(Auth::user());
         Auth::user()->watchlist()->create([
-            'movie_id' => request('movie_id'),
+            'movie_id' => $id,
         ]);
 
-        return 'Wishlist Restored';
+        return Movie::find($id)->title . ' movie is inserted to wishlist';
     }
 
     /**
@@ -44,10 +43,13 @@ class WatchlistController extends Controller
      */
     public function show($id)
     {
-        $watch = Watchlist::findOrFail($id);
-        if (Gate::authorize('watchlist', $watch)) {
-            return $watch;
-        }
+
+        return Watchlist::where('user_id', Auth::user()->id)->get();
+
+        // $watch = Watchlist::findOrFail($id);
+        // if (Gate::authorize('watchlist', $watch)) {
+        //     return $watch;
+        // }
     }
 
     /**

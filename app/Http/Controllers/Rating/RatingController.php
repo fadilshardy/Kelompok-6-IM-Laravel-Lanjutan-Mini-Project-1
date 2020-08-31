@@ -8,7 +8,6 @@ use App\Models\Rating;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class RatingController extends Controller
 {
@@ -69,14 +68,20 @@ class RatingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RatingRequest $request, $id)
+    public function update(RatingRequest $request, Rating $rating)
     {
-        $rate = Rating::findOrFail($id);
-        if (Gate::allows('rating', $rate)) {
-            $rate->update($this->ratingForm());
+
+        if (Auth::id() == $rating->user_id) {
+            $rating->update($this->ratingForm());
+
+        } else {
+            return 'Youre Not Authorized';
         }
 
-        return 'Youre Not Authorized';
+        // if (Gate::allows('rating', $rate)) {
+        //     $rate->update($this->ratingForm());
+        // }
+
     }
 
     /**
