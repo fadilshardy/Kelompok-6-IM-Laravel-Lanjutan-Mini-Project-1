@@ -7,6 +7,7 @@ use App\Http\Requests\MovieRequest;
 use App\Http\Resources\MovieCollection;
 use App\Models\Category;
 use App\Models\Movie;
+use DB;
 use Illuminate\Http\Request;
 use App\Http\Resources\MovieResource;
 
@@ -49,7 +50,7 @@ class MovieController extends Controller
     public function store(MovieRequest $request)
     {
 
-        $category_array = explode(',', $request['category']);
+        $category_array = explode(',', strtolower($request['category']));
 
         $category_ids = [];
 
@@ -124,6 +125,14 @@ class MovieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function tags($tag)
+    {
+        $tag = DB::table('categories')->where('name', $tag)->pluck('id');
+        $movie_id = DB::table('category_movie')->where('category_id', $tag)->pluck('movie_id');
+        $movies = Movie::whereIn('id', $movie_id)->get();
+        return $movies;
+    }
+
     public function destroy($id)
     {
         Movie::destroy($id);

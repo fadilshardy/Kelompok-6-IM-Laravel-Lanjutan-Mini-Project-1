@@ -36,7 +36,7 @@ class Rating extends Model
         ]);
     }
 
-    public function dislike($user)
+    public function dislike($user = null)
     {
         return $this->like($user, false);
     }
