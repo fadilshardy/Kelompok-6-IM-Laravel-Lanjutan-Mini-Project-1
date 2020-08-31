@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Movie;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\MovieRequest;
 use App\Http\Resources\MovieCollection;
-use App\Http\Resources\MovieResource;
+use App\Models\Category;
 use App\Models\Movie;
 use Illuminate\Http\Request;
-use App\Models\Category;
-use Illuminate\Support\Facades\DB;
 
 class MovieController extends Controller
 {
@@ -19,9 +18,11 @@ class MovieController extends Controller
      */
     public function index()
     {
-        $movie = Movie::with(['ratings', 'avg_rating' => function ($q) {
-            $q->getAvgRating()->pluck('avg_rating');
-        }])->get();
+        // $movie = Movie::with(['ratings', 'avg_rating' => function ($q) {
+        //     $q->getAvgRating()->pluck('avg_rating');
+        // }])->get();
+
+        $movie = Movie::all();
 
         return new MovieCollection($movie);
     }
@@ -30,11 +31,11 @@ class MovieController extends Controller
     {
         return [
             'title' => request('title'),
-            'img_url' => request('image'),
+            'img_url' => request('img_url'),
             'synopsis' => request('synopsis'),
             'release_date' => request('release_date'),
             'watchtime' => request('watchtime'),
-            'category' => request('category')
+            'category' => request('category'),
         ];
     }
 
@@ -75,9 +76,11 @@ class MovieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Movie $movie)
     {
-        return new MovieResource(Movie::findOrFail($id));
+        $movie->ratings = $movie->ratings();
+        return $movie;
+        // return new MovieResource(Movie::findOrFail($id));
     }
 
     /**

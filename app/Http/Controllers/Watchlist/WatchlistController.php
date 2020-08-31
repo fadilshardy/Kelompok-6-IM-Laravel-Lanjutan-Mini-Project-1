@@ -1,7 +1,7 @@
 <?php
+namespace App\Http\Controllers\Watchlist;
 
-namespace App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use App\Http\Requests\WatchlistRequest;
 use App\Models\Watchlist;
 use Illuminate\Http\Request;
@@ -30,7 +30,7 @@ class WatchlistController extends Controller
     {
         // dd(Auth::user());
         Auth::user()->watchlist()->create([
-            'movie_id' => request('movie_id')
+            'movie_id' => request('movie_id'),
         ]);
 
         return 'Wishlist Restored';
@@ -63,7 +63,7 @@ class WatchlistController extends Controller
 
         if (Gate::authorize('watchlist', $watch)) {
             $watch->update([
-                'movie_id' => request('movie')
+                'movie_id' => request('movie'),
             ]);
 
             return 'Watchlist Updated';

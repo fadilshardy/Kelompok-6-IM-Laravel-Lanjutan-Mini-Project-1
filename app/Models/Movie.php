@@ -15,7 +15,8 @@ class Movie extends Model
 
     public function ratings()
     {
-        return $this->hasMany(Rating::class);
+        $ratings = Rating::where('movie_id', $this->id)->get();
+        return $ratings;
     }
 
     public function avg_rating()
