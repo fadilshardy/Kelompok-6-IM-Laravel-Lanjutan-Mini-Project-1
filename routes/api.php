@@ -34,7 +34,7 @@ Route::middleware('auth.role:admin')->group(function () {
     Route::delete('delete-user/{id}', 'UserController@destroy');
 });
 
-Route::post('logout', 'Auth\LogoutController')->middleware('auth.role:user');
+Route::post('logout', 'Auth\LogoutController');
 
 // Public Route
 Route::get('rating/{rating}', 'Rating\RatingController@show');
