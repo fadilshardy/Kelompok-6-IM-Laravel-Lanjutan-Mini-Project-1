@@ -25,8 +25,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('watchlist', function ($user, $watchlist) {
-            return $user->id === $watchlist->user_id;
+        Gate::define('athorize', function ($user, $athorize) {
+            return $user->id === $athorize->user_id;
         });
     }
 }

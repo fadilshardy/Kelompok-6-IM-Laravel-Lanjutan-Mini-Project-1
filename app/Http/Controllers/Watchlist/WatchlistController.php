@@ -48,13 +48,7 @@ class WatchlistController extends Controller
      */
     public function show($id)
     {
-
         return Watchlist::where('user_id', Auth::user()->id)->get();
-
-        // $watch = Watchlist::findOrFail($id);
-        // if (Gate::authorize('watchlist', $watch)) {
-        //     return $watch;
-        // }
     }
 
     /**
@@ -68,7 +62,7 @@ class WatchlistController extends Controller
     {
         $watch = Watchlist::findOrFail($id);
 
-        if (Gate::authorize('watchlist', $watch)) {
+        if (Gate::authorize('athorize', $watch)) {
             $watch->update([
                 'movie_id' => request('movie'),
             ]);
@@ -86,7 +80,7 @@ class WatchlistController extends Controller
     public function destroy($id)
     {
         $watch = Watchlist::findOrFail($id);
-        if (Gate::authorize('watchlist', $watch)) {
+        if (Gate::authorize('athorize', $watch)) {
             $watch->delete($id);
             return 'Watchlist Deleted';
         }
